@@ -1,0 +1,93 @@
+---
+import '../styles/global.css';
+import { SITE, SITE_URL, UI, GA_ID, GSC_VERIFICATION, LINKS, langPrefix, type Lang } from '../site.config';
+
+interface Props {
+  lang: Lang;
+  title?: string;
+  description?: string;
+  // 반대 언어 페이지 경로. 없으면 반대 언어 홈으로 연결
+  altPath?: string;
+  ogType?: 'website' | 'article';
+  publishedTime?: Date;
+}
+
+const { lang, title, description, altPath, ogType = 'website', publishedTime } = Astro.props;
+const site = SITE[lang];
+const ui = UI[lang];
+const otherLang: Lang = lang === 'ko' ? 'en' : 'ko';
+const pageTitle = title ? `${title} | ${site.title}` : `${site.title} — ${site.tagline}`;
+const pageDesc = description ?? site.description;
+const canonical = new URL(Astro.url.pathname, SITE_URL).href;
+const altHref = altPath ?? `${langPrefix(otherLang)}/`;
+const prefix = langPrefix(lang);
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDesc} />
+    <meta name="author" content={site.author} />
+    <link rel="canonical" href={canonical} />
+    {altPath && (
+      <>
+        <link rel="alternate" hreflang={lang} href={canonical} />
+        <link rel="alternate" hreflang={otherLang} href={new URL(altPath, SITE_URL).href} />
+      </>
+    )}
+    <link rel="alternate" type="application/rss+xml" title={site.title} href={`${prefix}/rss.xml`} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={title ?? site.title} />
+    <meta property="og:description" content={pageDesc} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={site.title} />
+    <meta property="og:locale" content={lang === 'ko' ? 'ko_KR' : 'en_US'} />
+    {publishedTime && <meta property="article:published_time" content={publishedTime.toISOString()} />}
+    <meta name="twitter:card" content="summary" />
+
+    {GSC_VERIFICATION && <meta name="google-site-verification" content={GSC_VERIFICATION} />}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+    {GA_ID && (
+      <>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}></script>
+        <script is:inline define:vars={{ GA_ID }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', GA_ID);
+        </script>
+      </>
+    )}
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap header-inner">
+        <a class="brand" href={`${prefix}/`}>{site.title}</a>
+        <nav>
+          <a href={`${prefix}/posts/`}>{ui.allPosts}</a>
+          <a href={`${prefix}/about/`}>{ui.about}</a>
+          <a class="lang" href={altHref} hreflang={otherLang}>{ui.switchLang}</a>
+        </nav>
+      </div>
+    </header>
+    <main class="wrap">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="wrap footer-inner">
+        <span>© {new Date().getFullYear()} {site.author}</span>
+        <span class="footer-links">
+          {LINKS.linkedin && <a href={LINKS.linkedin} rel="me">LinkedIn</a>}
+          {LINKS.email && <a href={`mailto:${LINKS.email}`}>Email</a>}
+          <a href={`${prefix}/rss.xml`}>{ui.rss}</a>
+        </span>
+      </div>
+    </footer>
+  </body>
+</html>

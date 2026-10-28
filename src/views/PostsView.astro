@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+import PostList from '../components/PostList.astro';
+import CategoryChips from '../components/CategoryChips.astro';
+import { CATEGORIES, UI, langPrefix, type Category, type Lang } from '../site.config';
+import { getPosts } from '../lib/posts';
+
+interface Props {
+  lang: Lang;
+  category?: Category;
+}
+
+const { lang, category } = Astro.props;
+const all = await getPosts(lang);
+const posts = category ? all.filter((p) => p.data.category === category) : all;
+const title = category ? CATEGORIES[category][lang] : UI[lang].allPosts;
+const otherPrefix = langPrefix(lang === 'ko' ? 'en' : 'ko');
+const altPath = category ? `${otherPrefix}/category/${category}/` : `${otherPrefix}/posts/`;
+---
+
+<Base lang={lang} title={title} altPath={altPath}>
+  <h1 class="section-title">{title}</h1>
+  <CategoryChips lang={lang} active={category} />
+  <PostList posts={posts} lang={lang} />
+</Base>

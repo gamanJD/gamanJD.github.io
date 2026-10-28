@@ -1,0 +1,52 @@
+---
+import { render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { CATEGORIES, UI, langPrefix } from '../site.config';
+import { formatDate, getTranslation, postLang, postUrl, type Post } from '../lib/posts';
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const lang = postLang(post);
+const ui = UI[lang];
+const prefix = langPrefix(lang);
+const { Content } = await render(post);
+const translation = await getTranslation(post);
+const { title, description, pubDate, updatedDate, category, tags, draft } = post.data;
+---
+
+<Base
+  lang={lang}
+  title={title}
+  description={description}
+  altPath={translation ? postUrl(translation) : undefined}
+  ogType="article"
+  publishedTime={pubDate}
+>
+  <article>
+    <header class="post-header">
+      <div class="meta">
+        <a class="cat" href={`${prefix}/category/${category}/`}>{CATEGORIES[category][lang]}</a>
+        <time datetime={pubDate.toISOString()}>{formatDate(pubDate, lang)}</time>
+        {updatedDate && <span>{ui.updated} {formatDate(updatedDate, lang)}</span>}
+        {draft && <span class="draft-badge">DRAFT</span>}
+      </div>
+      <h1>{title}</h1>
+      <p class="lead">{description}</p>
+    </header>
+    <div class="prose">
+      <Content />
+    </div>
+    {tags.length > 0 && (
+      <ul class="tags">
+        {tags.map((tag) => <li>#{tag}</li>)}
+      </ul>
+    )}
+    <footer class="post-footer">
+      <a href={`${prefix}/posts/`}>← {ui.allPosts}</a>
+      {translation && <a href={postUrl(translation)} hreflang={postLang(translation)}>{ui.switchLang} →</a>}
+    </footer>
+  </article>
+</Base>

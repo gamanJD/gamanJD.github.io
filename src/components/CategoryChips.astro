@@ -1,0 +1,22 @@
+---
+import { CATEGORIES, CATEGORY_KEYS, UI, langPrefix, type Category, type Lang } from '../site.config';
+
+interface Props {
+  lang: Lang;
+  active?: Category;
+}
+
+const { lang, active } = Astro.props;
+const prefix = langPrefix(lang);
+---
+
+<ul class="chips">
+  <li><a href={`${prefix}/posts/`} class:list={[{ active: !active }]}>{UI[lang].allPosts}</a></li>
+  {CATEGORY_KEYS.map((key) => (
+    <li>
+      <a href={`${prefix}/category/${key}/`} class:list={[{ active: active === key }]}>
+        {CATEGORIES[key][lang]}
+      </a>
+    </li>
+  ))}
+</ul>

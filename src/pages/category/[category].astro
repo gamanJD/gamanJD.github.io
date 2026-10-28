@@ -1,0 +1,12 @@
+---
+import PostsView from '../../views/PostsView.astro';
+import { CATEGORY_KEYS, type Category } from '../../site.config';
+
+export function getStaticPaths() {
+  return CATEGORY_KEYS.map((category) => ({ params: { category } }));
+}
+
+const category = Astro.params.category as Category;
+---
+
+<PostsView lang="ko" category={category} />

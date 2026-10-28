@@ -1,0 +1,72 @@
+---
+import Base from '../layouts/Base.astro';
+import { CATEGORIES, LINKS, SITE, langPrefix, type Lang } from '../site.config';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const other: Lang = lang === 'ko' ? 'en' : 'ko';
+const c = CATEGORIES;
+---
+
+<Base lang={lang} title={lang === 'ko' ? '소개' : 'About'} altPath={`${langPrefix(other)}/about/`}>
+  <article class="prose">
+    {lang === 'ko' ? (
+      <>
+        <h1>{SITE.ko.title}</h1>
+        <p>
+          JD는 제 이름의 이니셜이자 <strong>Job Description</strong>입니다. 기획자로서 제가 하는 일이 무엇인지,
+          어떻게 일하는지를 글로 정리해 두는 곳입니다.
+        </p>
+        <p>
+          서비스 기획, 마케팅 기획, 전략 기획을 넘나들며 일하고 있습니다. 산업은 달라도 결국 관심은 하나로 모입니다.
+          <strong>고객이 남고, 돈이 돌고, 일이 굴러가게 만드는 구조</strong>를 어떻게 설계할 것인가.
+        </p>
+        <h2>이런 글을 씁니다</h2>
+        <ul>
+          <li><strong>{c.retention.ko}</strong> — 멤버십, 가격, 로열티, CRM의 원리</li>
+          <li><strong>{c.teardown.ko}</strong> — 잘 되는 서비스의 구조를 뜯어보기</li>
+          <li><strong>{c.method.ko}</strong> — 기획에 공통으로 쓰는 사고 도구와 문서 구조</li>
+          <li><strong>{c.field.ko}</strong> — 현장에서 일하며 배운 것</li>
+        </ul>
+        <p class="meta">
+          이 블로그의 글은 개인 의견이며, 소속 회사의 공식 입장과 무관합니다.
+          회사 내부 정보는 다루지 않고, 공개된 정보와 제 경험에서 얻은 생각만 씁니다.
+        </p>
+      </>
+    ) : (
+      <>
+        <h1>{SITE.en.title}</h1>
+        <p>
+          JD stands for my initials — and for <strong>Job Description</strong>. This is where I write down what a
+          planner actually does, and how I do it.
+        </p>
+        <p>
+          I work across service planning, marketing planning, and strategy in Korea. Whatever the industry, my
+          interest comes back to one question: <strong>how do you design structures that keep customers, keep
+          revenue flowing, and keep work moving?</strong>
+        </p>
+        <h2>What I write about</h2>
+        <ul>
+          <li><strong>{c.retention.en}</strong> — how memberships, pricing, loyalty, and CRM actually work</li>
+          <li><strong>{c.teardown.en}</strong> — taking apart well-run services to see their structure</li>
+          <li><strong>{c.method.en}</strong> — thinking tools and document structures planners share</li>
+          <li><strong>{c.field.en}</strong> — lessons from the field, including Korea's EV charging market</li>
+        </ul>
+        <p class="meta">
+          Views here are my own and do not represent my employer. I write only from public information and my
+          own experience.
+        </p>
+      </>
+    )}
+    {(LINKS.linkedin || LINKS.email) && (
+      <p>
+        {LINKS.linkedin && <a href={LINKS.linkedin} rel="me">LinkedIn</a>}
+        {LINKS.linkedin && LINKS.email && ' · '}
+        {LINKS.email && <a href={`mailto:${LINKS.email}`}>Email</a>}
+      </p>
+    )}
+  </article>
+</Base>

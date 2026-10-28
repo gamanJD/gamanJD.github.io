@@ -1,0 +1,31 @@
+---
+import { CATEGORIES, UI, langPrefix, type Lang } from '../site.config';
+import { formatDate, postUrl, type Post } from '../lib/posts';
+
+interface Props {
+  posts: Post[];
+  lang: Lang;
+}
+
+const { posts, lang } = Astro.props;
+---
+
+{posts.length === 0 ? (
+  <p class="meta">{UI[lang].noPosts}</p>
+) : (
+  <ul class="post-list">
+    {posts.map((post) => (
+      <li>
+        <div class="meta">
+          <a class="cat" href={`${langPrefix(lang)}/category/${post.data.category}/`}>
+            {CATEGORIES[post.data.category][lang]}
+          </a>
+          <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate, lang)}</time>
+          {post.data.draft && <span class="draft-badge">DRAFT</span>}
+        </div>
+        <h2><a href={postUrl(post)}>{post.data.title}</a></h2>
+        <p>{post.data.description}</p>
+      </li>
+    ))}
+  </ul>
+)}

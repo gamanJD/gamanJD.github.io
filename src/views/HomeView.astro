@@ -1,0 +1,24 @@
+---
+import Base from '../layouts/Base.astro';
+import PostList from '../components/PostList.astro';
+import CategoryChips from '../components/CategoryChips.astro';
+import { SITE, UI, type Lang } from '../site.config';
+import { getPosts } from '../lib/posts';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const posts = (await getPosts(lang)).slice(0, 10);
+---
+
+<Base lang={lang}>
+  <section class="hero">
+    <h1>{SITE[lang].tagline}</h1>
+    <p>{SITE[lang].description}</p>
+  </section>
+  <CategoryChips lang={lang} />
+  <h2 class="section-title">{UI[lang].latest}</h2>
+  <PostList posts={posts} lang={lang} />
+</Base>
