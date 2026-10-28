@@ -2,7 +2,7 @@
 import { render } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import { CATEGORIES, UI, langPrefix } from '../site.config';
-import { formatDate, getTranslation, postLang, postUrl, type Post } from '../lib/posts';
+import { formatDate, getTranslation, postLang, postSlug, postUrl, type Post } from '../lib/posts';
 
 interface Props {
   post: Post;
@@ -24,6 +24,7 @@ const { title, description, pubDate, updatedDate, category, tags, draft } = post
   altPath={translation ? postUrl(translation) : undefined}
   ogType="article"
   publishedTime={pubDate}
+  ogImage={`/og/${lang}/${postSlug(post)}.png`}
 >
   <article>
     <header class="post-header">
