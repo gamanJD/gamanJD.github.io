@@ -1,5 +1,5 @@
 ---
-title: "JD의 기획을 시작하며"
+title: "JD의 기획 JD(Job Description)를 시작하며"
 description: "기획자의 Job Description을 직접 써보기로 했습니다. 이 블로그에서 무엇을, 왜, 어떻게 쓸지 정리합니다."
 pubDate: 2026-10-28
 category: method
