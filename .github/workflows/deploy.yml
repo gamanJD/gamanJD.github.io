@@ -3,6 +3,9 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  # 예약 발행: 매일 00:05 KST(15:05 UTC)에 다시 빌드해 그날 날짜의 글을 공개
+  schedule:
+    - cron: '5 15 * * *'
   workflow_dispatch:
 
 permissions:

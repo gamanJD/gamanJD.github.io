@@ -32,6 +32,7 @@
 - frontmatter: `title`, `description`(검색 결과에 노출, 80~150자), `pubDate`, `category`, `tags`, 선택 `updatedDate`, `draft`
 - 영어판은 직역하지 않는다. 미국 독자 기준으로 맥락(한국 서비스 설명 등)을 보충해 다시 쓴다.
 - 본문은 `##`부터. 제목(`#`)은 레이아웃이 넣는다.
+- 목차 번호는 `1.` → `(1)` → `가.` 순서. 굵게(`**`)는 쓰지 않는다(AI 티가 남).
 - 글마다 LinkedIn 요약 포스트(한/영)도 `drafts/<slug>.linkedin.md`에 함께 만든다.
 
 ## 설정 위치
